@@ -5,9 +5,11 @@ using TMPro;
 
 public class DialogueTrigger : MonoBehaviour
 {
-    public Canvas dialogueCanvas;      // Canvas a activar/desactivar
-    public TextMeshProUGUI dialogueText;         // Texto TMP donde se muestran los diálogos
-    [TextArea] public List<string> dialogues; // Lista de diálogos
+    public Decisions decisions;                 // Referencia al script Decisions
+    public bool IsDecisions;                    // Indica si este NPC tiene decisiones
+    public Canvas dialogueCanvas;               // Canvas diálogo
+    public TextMeshProUGUI dialogueText;        // Texto diálogo
+    [TextArea] public List<string> dialogues;  // Lista de diálogos
 
     private int currentDialogueIndex = 0;
     private bool playerInside = false;
@@ -22,7 +24,6 @@ public class DialogueTrigger : MonoBehaviour
     {
         if (playerInside && !dialogueFinished)
         {
-            // Avanza al siguiente diálogo con espacio
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 currentDialogueIndex++;
@@ -44,6 +45,7 @@ public class DialogueTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInside = true;
+            dialogueFinished = false;           // Reset para poder repetir diálogo
             dialogueCanvas.gameObject.SetActive(true);
             currentDialogueIndex = 0;
             dialogueText.text = dialogues[currentDialogueIndex];
@@ -63,5 +65,10 @@ public class DialogueTrigger : MonoBehaviour
     {
         dialogueFinished = true;
         dialogueCanvas.gameObject.SetActive(false);
+
+        if (IsDecisions && decisions != null)
+            decisions.ActivateDecisions(this);
+
+        Destroy(gameObject);
     }
 }

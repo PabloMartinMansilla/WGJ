@@ -5,30 +5,43 @@ using UnityEngine;
 public class Decisions : MonoBehaviour
 {
     [Header("Referencias")]
-    public GameObject player;              // Objeto del jugador
-    public MonoBehaviour[] playerScripts;  // Scripts del jugador que se van a desactivar/activar
-    public GameObject secondCanvas;        // El segundo Canvas que se activará
+    public DialogueTrigger currentDialogueTrigger;
+    public MonoBehaviour[] playerScripts;  // Scripts jugador a desactivar/activar
+    public GameObject secondCanvas;        // Canvas decisiones
 
     private void OnEnable()
     {
-
-        // Desactivar scripts del jugador
-        foreach (var script in playerScripts)
+        if (currentDialogueTrigger != null && currentDialogueTrigger.IsDecisions)
         {
-            script.enabled = false;
+            secondCanvas.SetActive(true);
         }
 
-        // Mostrar el cursor
+        foreach (var script in playerScripts)
+            script.enabled = false;
+
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
 
+    public void CloseDecisions()
+    {
+        gameObject.SetActive(false); // Esto dispara OnDisable()
+    }
+
     private void OnDisable()
     {
-        // Activar el segundo Canvas
-        if (secondCanvas != null)
-        {
-            secondCanvas.SetActive(true);
-        }
+        secondCanvas.SetActive(false);
+
+        foreach (var script in playerScripts)
+            script.enabled = true;
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    public void ActivateDecisions(DialogueTrigger dialogueTrigger)
+    {
+        currentDialogueTrigger = dialogueTrigger;
+        gameObject.SetActive(true);
     }
 }
