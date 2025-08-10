@@ -11,6 +11,7 @@ public class Decisions : MonoBehaviour
 
     private void OnEnable()
     {
+
         // Desactivar scripts del jugador
         foreach (var script in playerScripts)
         {

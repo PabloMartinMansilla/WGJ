@@ -5,7 +5,6 @@ using TMPro;
 
 public class DialogueTrigger : MonoBehaviour
 {
-
     public Canvas dialogueCanvas;      // Canvas a activar/desactivar
     public TextMeshProUGUI dialogueText;         // Texto TMP donde se muestran los diálogos
     [TextArea] public List<string> dialogues; // Lista de diálogos
@@ -42,7 +41,7 @@ public class DialogueTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && !dialogueFinished)
+        if (other.CompareTag("Player"))
         {
             playerInside = true;
             dialogueCanvas.gameObject.SetActive(true);
